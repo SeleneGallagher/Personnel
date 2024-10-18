@@ -1,0 +1,142 @@
+<html>
+  <head>
+    <title>掷子游戏</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="150">
+      请用支持HTML5/CSS3的浏览器打开此页面
+    </canvas>
+    <br/>
+    <input type="button" value="投掷骰子" onClick="throwDice()"/>
+    投掷次数：<input id="stage" type="text" value="第一次投掷" readOnly="true"/>
+    点数:<input id="num" type="text" value="" readOnly="true"/>
+    结果：<input id="result" type="text" value="" readOnly="true"/>
+    <br/>
+    <font style="color:red;">
+      掷骰子游戏的规则为：第一次掷骰子如果为2，3或者12，那么就输了；否则进入第二次掷骰子阶段，如果第二次掷骰子为7，那么就输了，否则此局胜利！
+    </font>
+  </body>
+</html>
+<script type="text/javascript">
+  var ctx;
+  var dicex1 = 10,dicey1=10,dicex2=150,dicey2=10;
+  var width=90,height=90;
+  var stage=1;
+  var stageStr = ['第一次掷骰子','第二次掷骰子'];
+  var result = ['此局胜利','此局失败'];
+  window.onload = function() {
+    ctx = document.getElementById("canvas").getContext("2d");
+    ctx.strokeStyle="rgb(255,0,00)";
+    
+	//绘制第一个骰子的边框
+    ctx.strokeRect(dicex1,dicey1,width,height);
+ 
+	//绘制第二个骰子的边框
+    ctx.strokeRect(dicex2,dicey2,width,height);
+ 
+    draw1(dicex1,dicey1);
+    draw1(dicex2,dicey2);
+  }
+  
+  //投掷骰子
+  function throwDice() {
+ 
+    document.getElementById('result').value='';
+    var num1 = Math.floor(Math.random()*6)+1;
+    var num2 = Math.floor(Math.random()*6)+1;
+    var num = num1+num2;
+    drawDice(num1,dicex1,dicey1);
+    drawDice(num2,dicex2,dicey2);
+	
+    //判断是第几次掷骰子
+    document.getElementById('num').value=num;
+    if(stage==1){
+      
+      document.getElementById('stage').value = stageStr[0];
+      if(num==2||num==3||num==12){
+        
+        //输了
+        document.getElementById('result').value=result[1];
+      }else{
+        tage++;
+      }
+    }else if(stage==2){
+      
+      document.getElementById('stage').value = stageStr[1];
+      if(num==7){
+        
+        //输了
+        document.getElementById('result').value=result[1];
+      }else{
+        document.getElementById('result').value=result[0];
+      }
+      stage=1;
+    }
+  }
+  //根据点数绘制骰子
+  function drawDice(num,cx,cy){
+    
+    switch(num){
+        
+      case 1:clearRect(cx,cy);draw1(cx,cy);break;		
+  		case 2:clearRect(cx,cy);draw2(cx,cy);break;
+  		case 3:clearRect(cx,cy);draw1(cx,cy);draw2(cx,cy);break;
+  		case 4:clearRect(cx,cy);draw3(cx,cy);break;
+  		case 5:clearRect(cx,cy);draw1(cx,cy);draw3(cx,cy);break;
+  		case 6:clearRect(cx,cy);draw2(cx,cy);draw3(cx,cy);break;
+    }
+  }
+  //清空骰子面
+  function clearRect(cx,cy){
+ 
+    ctx.fillStyle="rgb(255,255,255)";
+	  ctx.fillRect(cx,cy,width,height);
+  }
+  //绘制点数1
+  function draw1(cx,cy) {
+    
+    if(ctx!=null){
+      
+      ctx.beginPath();
+	    ctx.fillStyle="rgb(0,0,0)";
+	    ctx.arc(cx+45,cy+45,5,0,Math.PI*2,false);
+	    ctx.fill();	
+    }
+  }
+  //绘制点数2
+  function draw2(cx,cy) {
+    
+    if(ctx!=null){
+      
+      ctx.beginPath();
+	    ctx.fillStyle="rgb(0,0,0)";
+	    ctx.arc(cx+45,cy+15,5,0,Math.PI*2,false);
+      ctx.fill();	
+	    ctx.beginPath();
+	    ctx.fillStyle="rgb(0,0,0)";
+      ctx.arc(cx+45,cy+75,5,0,Math.PI*2,false);
+	    ctx.fill();	
+    }
+  }
+  //绘制点数4
+  function draw3(cx,cy) {
+    
+    if(ctx!=null){
+ 
+      ctx.fillStyle="rgb(0,0,0)";
+	    ctx.beginPath();
+	    ctx.arc(cx+15,cy+15,5,0,Math.PI*2,false);
+      ctx.fill();	
+	    ctx.beginPath();
+      ctx.arc(cx+75,cy+15,5,0,Math.PI*2,false);
+	    ctx.fill();	
+      ctx.beginPath();
+	    ctx.arc(cx+15,cy+75,5,0,Math.PI*2,false);
+      ctx.fill();	
+	    ctx.beginPath();
+      ctx.arc(cx+75,cy+75,5,0,Math.PI*2,false);
+	    ctx.fill();
+    }
+  }
+</script>
